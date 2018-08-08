@@ -14,10 +14,20 @@ import random #We'll need this later in the lab
 
 turtle.tracer(1,0) #This helps the turtle move more smoothly
 
+textTurtle=turtle.clone()
+textTurtle.hideturtle()
+textTurtle.penup()
+textTurtle.goto(0,350)
+textTurtle.write("Snake Game !!!",align="center",font=("times",33,"bold"))
+
+scoreTurtle=turtle.clone()
+scoreTurtle.hideturtle()
+scoreTurtle.penup()
+scoreTurtle.goto(0,-350)
 
 
-SIZE_X=800
-SIZE_Y=500
+SIZE_X=1000
+SIZE_Y=1000
 turtle.setup(SIZE_X, SIZE_Y) #Curious? It's the turtle window  
                              #size. 
 turtle.penup()
@@ -30,8 +40,18 @@ pos_list = []
 stamp_list = []
 food_pos = []
 food_stamps = []
-
+scoreTurtle.write(int(len(stamp_list)),align="center",font=("times",33,"bold"))
 #Set up positions (x,y) of boxes that make up the snake
+
+border = turtle.clone()
+border.hideturtle()
+border.penup()
+border.goto(300,300)
+border.pendown()
+border.goto(300,-300)
+border.goto(-300,-300)
+border.goto(-300,300)
+border.goto(300,300)
 snake = turtle.clone()
 snake.shape("square")
 
@@ -87,10 +107,10 @@ LEFT=1
 DOWN=2
 RIGHT=3
 direction = UP
-UP_EDGE = 250
-DOWN_EDGE = -250
-RIGHT_EDGE = 400
-LEFT_EDGE = -400
+UP_EDGE = 300
+DOWN_EDGE = -300
+RIGHT_EDGE = 300
+LEFT_EDGE = -300
 
 def up():
     global direction #snake direction is global (same everywhere)
@@ -125,10 +145,10 @@ def make_food():
     #But we need to make food pieces only appear on game squares
     #So we cut up the game board into multiples of SQUARE_SIZE.
     
-    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
-    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    min_x=(LEFT_EDGE/SQUARE_SIZE)+1
+    max_x=(RIGHT_EDGE/SQUARE_SIZE)-1
+    min_y=(DOWN_EDGE/SQUARE_SIZE)+1
+    max_y=(UP_EDGE/SQUARE_SIZE)-1
 
     
     
@@ -142,11 +162,12 @@ def make_food():
         ##                        position 
         ##2.WRITE YOUR CODE HERE: Add the food turtle's position to the food positions list
         ##3.WRITE YOUR CODE HERE: Add the food turtle's stamp to the food stamps list
+
 def move_snake():
     my_pos = snake.pos()
     x_pos = my_pos[0]
     y_pos = my_pos[1]
-    turtle.ontimer(move_snake,TIME_STEP)
+    
     if direction==RIGHT:
         snake.goto(x_pos + SQUARE_SIZE, y_pos)
         print("You moved right!")
@@ -205,14 +226,27 @@ def move_snake():
         START_LENGTH +=1
         stamp_list.append(snake.stamp())
         pos_list.append(snake.pos())
+        scoreTurtle.clear()
+        scoreTurtle.write(int(len(stamp_list)-11),align="center",font=("times",33,"bold"))
+        global TIME_STEP
+        if TIME_STEP >80:
+            TIME_STEP=TIME_STEP-5    
+        elif TIME_STEP > 60:
+            TIME_STEP=TIME_STEP - 4
+        elif TIME_STEP > 40:
+            TIME_STEP=TIME_STEP-3
+        elif TIME_STEP > 20:
+            TIME_STEP=TIME_STEP -2
     old_stamp = stamp_list.pop(0)
     snake.clearstamp(old_stamp)
     pos_list.pop(0)
+    
     if len(food_stamps) <= 6 :
         make_food()
-    
+    turtle.ontimer(move_snake,TIME_STEP)
 move_snake()
 
+    
  #Add trash picture
                       # Make sure you have downloaded this shape 
                       # from the Google Drive folder and saved it
