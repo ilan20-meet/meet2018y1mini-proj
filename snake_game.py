@@ -11,6 +11,8 @@ Date:
 import turtle
 import random #We'll need this later in the lab
 
+colorList=['red','orange','yellow','green','blue','purple','pink']
+count=0
 
 turtle.tracer(1,0) #This helps the turtle move more smoothly
 
@@ -54,8 +56,15 @@ border.goto(-300,300)
 border.goto(300,300)
 snake = turtle.clone()
 snake.shape("square")
+snake.color('purple')
 
 turtle.register_shape("trash.gif")
+turtle.register_shape("stars.gif")
+turtle.register_shape("rock.gif")
+screen = turtle.Screen()
+screen.setup()
+screen.bgpic('stars.gif')
+
 
 food = turtle.clone()
 food.shape("trash.gif")
@@ -158,12 +167,17 @@ def make_food():
     food.goto(food_x,food_y)
     food_pos.append(food.pos())
     food_stamps.append(food.stamp())
+
+    
         ##1.WRITE YOUR CODE HERE: Make the food turtle go to the randomly-generated
         ##                        position 
         ##2.WRITE YOUR CODE HERE: Add the food turtle's position to the food positions list
         ##3.WRITE YOUR CODE HERE: Add the food turtle's stamp to the food stamps list
 
 def move_snake():
+    global count
+    count+=1
+    snake.color(colorList[count%7])
     my_pos = snake.pos()
     x_pos = my_pos[0]
     y_pos = my_pos[1]
